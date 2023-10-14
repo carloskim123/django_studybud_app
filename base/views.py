@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,20 +10,23 @@ from .models import Room, Topic, User
 
 
 def login_page(request):
-    page = 'login'
+
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
-        email = request.POST.get('email').lower()
+        username = request.POST.get('username')
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(username=username)
         except:
             messages.error(request, 'User does not exist')
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
@@ -30,7 +34,7 @@ def login_page(request):
         else:
             messages.error(request, 'Username OR password does not exit')
 
-    context = {'page': page}
+    context = {}
     return render(request, 'base/login_register.html', context)
 
 
@@ -61,7 +65,7 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def create_room(request):
     form = RoomForm()
 
@@ -75,14 +79,17 @@ def create_room(request):
     return render(request, 'base/room_form.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def update_room(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
 
+    if request.user != room.host:
+        return HttpResponse("You are not allowed here")
+
     if request.method == "POST":
         form = RoomForm(request.POST, instance=room)
-        if form.is_valid:
+        if form.is_valid():
             form.save()
             return redirect("home")
 
@@ -90,9 +97,13 @@ def update_room(request, pk):
     return render(request, 'base/room_form.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def delete_room(request, pk):
     room = Room.objects.get(id=pk)
+
+    if request.user != room.host:
+        return HttpResponse("You are not allowed here")
+
 
     if request.method == "POST":
         room.delete()
