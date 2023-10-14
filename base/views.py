@@ -8,27 +8,29 @@ from .forms import RoomForm
 from .models import Room, Topic, User
 
 
-# Create your views here.
-
 def login_page(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
+    page = 'login'
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        email = request.POST.get('email').lower()
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(username=username)
-        except:  # Handle the specific exception when the user does not exist
-            messages.error(request, "User does not exist")
+            user = User.objects.get(email=email)
+        except:
+            messages.error(request, 'User does not exist')
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, "Username or password incorrect")
+            messages.error(request, 'Username OR password does not exit')
 
-    context = {}
+    context = {'page': page}
     return render(request, 'base/login_register.html', context)
 
 
@@ -59,7 +61,7 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 
-@login_required(login_required="/login")
+@login_required
 def create_room(request):
     form = RoomForm()
 
@@ -73,7 +75,7 @@ def create_room(request):
     return render(request, 'base/room_form.html', context)
 
 
-@login_required(login_required="/login")
+@login_required
 def update_room(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
@@ -88,7 +90,7 @@ def update_room(request, pk):
     return render(request, 'base/room_form.html', context)
 
 
-@login_required(login_required="/login")
+@login_required
 def delete_room(request, pk):
     room = Room.objects.get(id=pk)
 
