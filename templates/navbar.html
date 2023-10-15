@@ -12,9 +12,12 @@
     </form>
 
     {% if request.user.is_authenticated %}
+    <div>Hello, {{request.user}}</div>
      <a href="{% url 'logout' %}">Logout</a>
+    <hr>
     {% else %}
    <a href="{% url 'login' %}">Login</a>
+    <hr>
 
     {% endif %}
 </body>

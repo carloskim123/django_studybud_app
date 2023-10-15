@@ -1,13 +1,18 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>StudyBud</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}" media="screen" />
+
 </head>
 <body>
-    {% include 'navbar.html' %}
 
-    {% if messages %}
+
+{% include 'navbar.html' %}
+
+{% if messages %}
 <ul class="messages">
     {% for message in messages %}
     <li>{{ message }}</li>
@@ -15,9 +20,9 @@
 </ul>
 {% endif %}
 
-    {% block content %}
+{% block content %}
 
-    {% endblock %}
+{% endblock %}
 
 </body>
 </html>
