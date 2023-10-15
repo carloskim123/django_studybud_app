@@ -34,32 +34,31 @@ Follow these steps to set up and run the Django StudyBud app on your local machi
 
 2.  Change into the project directory:
 
+      `django_studybud_app` 
     
-    `cd django_studybud_app` 
-    
-3.  Install the project dependencies:
+4.  Install the project dependencies:
     
     
     `pip install -r requirements.txt`
     
-4.  Set up the database:
+5.  Set up the database:
     
     
     `python manage.py migrate` 
     
-5.  Create a superuser to manage the admin panel:
+6.  Create a superuser to manage the admin panel:
     
     
     `python manage.py createsuperuser` 
     
-6.  Start the development server:
+7.  Start the development server:
    
     
     `python manage.py runserver` 
     
-7.  Access the admin panel at `http://localhost:8000/admin/` and log in with the superuser account to manage rooms and users.
+8.  Access the admin panel at `http://localhost:8000/admin/` and log in with the superuser account to manage rooms and users.
     
-8.  Visit the StudyBud web app at `http://localhost:8000/` and start creating or joining study rooms!
+9.  Visit the StudyBud web app at `http://localhost:8000/` and start creating or joining study rooms!
     
 
 ## Configuration
