@@ -127,7 +127,7 @@ STATICFILES_DIRS= [
 ]
 
 
-
+# STATIC_ROOT = []
 
 
 

@@ -1,14 +1,27 @@
-<div>
-
-    <h3>Browse Topics</h3>
-    <hr>
-    <div>
-        <a href="{% url 'home' %}">All</a>
+<div class="topics">
+    <div class="topics__header">
+        <h2>Browse Topics</h2>
     </div>
+    <ul class="topics__list">
+        <li>
+            <a class="active" href="{% url 'home' %}">All <span>{{topics.count}}</span></a>
+        </li>
+        {% for topic in topics %}
 
-    {% for topic in topics %}
-    <div>
-        <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
-    </div>
-    {% endfor %}
+        <li>
+               <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}
+                   <span>{{topic.room_set.all.count}}</span></a>
+        </li>
+        {% endfor %}
+
+    </ul>
+    <a class="btn btn--link" href="topics.html">
+        More
+        <svg height="32" version="1.1" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg">
+            <title>chevron-down</title>
+            <path d="M16 21l-13-13h-3l16 16 16-16h-3l-13 13z"></path>
+        </svg>
+    </a>
 </div>
+
+
